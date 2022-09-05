@@ -93,6 +93,33 @@ func lengthOfLongestSubstring3(s string) int {
 	return maxLen
 }
 
+func longestSubString(s string) string {
+	indexMap := make(map[uint8]int)
+
+	start := 0
+	maxLenStart := 0
+	maxLen := 0
+	for i := 0; i < len(s); i++ {
+		if id, ok := indexMap[s[i]]; ok && id >= start {
+			localMax := i - start
+			if localMax > maxLen {
+				maxLenStart = start
+				maxLen = localMax
+			}
+			start = id + 1		// 最后更新start
+		}
+		indexMap[s[i]] = i
+	}
+
+	localMax := len(s) - start
+	if localMax > maxLen {
+		maxLen = localMax
+		maxLenStart = start
+	}
+
+	return s[maxLenStart:maxLenStart+maxLen]
+}
+
 func main() {
 	s := "abcabcbb"
 	fmt.Println(lengthOfLongestSubstring2(s))
